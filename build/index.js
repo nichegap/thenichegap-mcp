@@ -42,19 +42,30 @@ server.tool("analyze_niche_gap", "Analyze an SEO keyword to find search intent, 
             };
         }
         // Format the report for Claude
+        const mustHaves = (data.report.mustHaves || []).map((m) => `- **${m.topic}** (${m.coveragePercent || m.coverage || 0}% / ${m.coverageCount || 0} mentions)`).join("\n");
+        const gapsList = data.report.contentGaps || data.report.gaps || [];
+        const gaps = gapsList.map((g) => `- **${g.topic}** (Coverage: ${g.coverageCount || 0}/10): ${g.opportunity}`).join("\n");
+        let outlineText = "";
+        if (Array.isArray(data.report.outline)) {
+            outlineText = data.report.outline.map((o) => `${"#".repeat(o.level || 2)} ${o.heading} \n*Context: ${o.context || ""}*`).join("\n");
+        }
+        else if (data.report.outline?.sections) {
+            outlineText = `# ${data.report.outline.h1 || keyword}\n` +
+                data.report.outline.sections.map((s) => `## ${s.h2}\n${(s.h3s || []).map((h) => `- ${h}`).join("\n")}`).join("\n\n");
+        }
         const reportText = `
 # TheNicheGap Analysis Report
 **Keyword**: ${keyword}
-**Search Intent**: ${data.report.intent.type} - ${data.report.intent.reasoning}
+**Search Intent**: ${data.report.intent?.type || "Unknown"} - ${data.report.intent?.reasoning || ""}
 
 ## Must-Haves (Covered by Top 10)
-${data.report.mustHaves.map((m) => `- **${m.topic}** (${m.coverage}): ${m.explanation}`).join("\n")}
+${mustHaves}
 
 ## Content Gaps (Missed by Top 10)
-${data.report.gaps.map((g) => `- **${g.topic}**: ${g.opportunity}`).join("\n")}
+${gaps}
 
 ## Recommended Outline
-${data.report.outline.map((o) => `${"#".repeat(o.level)} ${o.heading} \n*Context: ${o.context}*`).join("\n")}
+${outlineText}
       `;
         return {
             content: [
