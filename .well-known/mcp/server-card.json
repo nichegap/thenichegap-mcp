@@ -1,0 +1,32 @@
+{
+  "serverInfo": {
+    "name": "thenichegap-mcp",
+    "version": "1.0.0"
+  },
+  "authentication": {
+    "required": true,
+    "schemes": []
+  },
+  "tools": [
+    {
+      "name": "analyze_niche_gap",
+      "description": "Analyze an SEO keyword to find search intent, industry must-haves, and content gaps using real SERP data from TheNicheGap. Use this to help craft highly differentiated articles.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "description": "The target SEO keyword to analyze (e.g., 'best standing desk')."
+          },
+          "locale": {
+            "type": "string",
+            "description": "The language locale code for the analysis (e.g., 'en', 'zh'). Defaults to 'en'."
+          }
+        },
+        "required": ["keyword"]
+      }
+    }
+  ],
+  "resources": [],
+  "prompts": []
+}
