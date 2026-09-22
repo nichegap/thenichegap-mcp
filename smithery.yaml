@@ -1,0 +1,18 @@
+startCommand:
+  type: stdio
+  config:
+    command: node
+    args:
+      - build/index.js
+    env:
+      THENICHEGAP_API_KEY: "{{THENICHEGAP_API_KEY}}"
+
+configSchema:
+  type: object
+  required:
+    - THENICHEGAP_API_KEY
+  properties:
+    THENICHEGAP_API_KEY:
+      type: string
+      title: "TheNicheGap API Key"
+      description: "Get your API key from https://thenichegap.com/op/developer"
